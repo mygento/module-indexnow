@@ -1,0 +1,1 @@
+# Mygento_IndexNow module
