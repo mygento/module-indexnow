@@ -1,5 +1,11 @@
 <?php
 
+/**
+ * @author Mygento Team
+ * @copyright 2026 Mygento (https://www.mygento.ru)
+ * @package Mygento_IndexNow
+ */
+
 declare(strict_types=1);
 
 namespace Mygento\IndexNow\Observer;
@@ -14,8 +20,6 @@ use Psr\Log\LoggerInterface;
 
 class CmsPageSaveAfter implements ObserverInterface
 {
-    private $page;
-
     public function __construct(
         private StoreManagerInterface $storeManager,
         private ScopeConfigInterface $scopeConfig,
@@ -25,17 +29,17 @@ class CmsPageSaveAfter implements ObserverInterface
 
     public function execute(Observer $observer): void
     {
-        $page= $observer->getEvent()->getObject();
-        if (!$this->page instanceof Page || !$this->page->getPageId()) {
+        $page = $observer->getEvent()->getObject();
+        if (!$page instanceof Page || !$page->getPageId()) {
             return;
         }
 
-        $identifier = $this->page->getIdentifier();
+        $identifier = $page->getIdentifier();
         if (!$identifier) {
             return;
         }
 
-        $storeIds = $this->page->getStoreId();
+        $storeIds = $page->getStoreId();
         if ($storeIds === null || in_array(0, (array) $storeIds, true)) {
             $stores = $this->storeManager->getStores();
             $storeIds = array_map(fn($s) => (int) $s->getId(), $stores);
@@ -61,7 +65,7 @@ class CmsPageSaveAfter implements ObserverInterface
             } catch (\Throwable $e) {
                 $this->logger->error(sprintf(
                     '[IndexNow] Error sending CMS page %s to store %d: %s',
-                    (string) $this->page->getId(),
+                    (string) $page->getId(),
                     (int) $storeId,
                     $e->getMessage(),
                 ));

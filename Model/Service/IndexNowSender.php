@@ -1,5 +1,11 @@
 <?php
 
+/**
+ * @author Mygento Team
+ * @copyright 2026 Mygento (https://www.mygento.ru)
+ * @package Mygento_IndexNow
+ */
+
 declare(strict_types=1);
 
 namespace Mygento\IndexNow\Model\Service;
@@ -11,7 +17,7 @@ use Psr\Log\LoggerInterface;
 
 class IndexNowSender
 {
-    private const array SERIVICE_CODES = [
+    private const array SERVICE_CODES = [
         'yandex',
         'bing',
     ];
@@ -32,7 +38,7 @@ class IndexNowSender
         $apiKey = $this->configHelper->getApiKey();
         $keyLocation = $this->configHelper->getKeyLocation();
 
-        foreach (self::SERIVICE_CODES as $code) {
+        foreach (self::SERVICE_CODES as $code) {
             if (!$this->configHelper->getEndpointUrl($code)) {
                 $this->log('[IndexNow] No endpoint available for ' . $code);
                 continue;

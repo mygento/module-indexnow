@@ -1,5 +1,11 @@
 <?php
 
+/**
+ * @author Mygento Team
+ * @copyright 2026 Mygento (https://www.mygento.ru)
+ * @package Mygento_IndexNow
+ */
+
 declare(strict_types=1);
 
 namespace Mygento\IndexNow\Observer;
