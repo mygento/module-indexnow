@@ -11,16 +11,16 @@
                    translate="label"
                    sortOrder="100"
                    showInDefault="1"
-                   showInWebsite="1"
-                   showInStore="1">
+                   showInWebsite="0"
+                   showInStore="0">
                 <label>General</label>
                 <field id="enabled"
                        translate="label comment"
                        type="select"
                        sortOrder="10"
                        showInDefault="1"
-                       showInWebsite="1"
-                       showInStore="1">
+                       showInWebsite="0"
+                       showInStore="0">
                     <label>Enable IndexNow</label>
                     <comment>Enable or disable IndexNow integration.</comment>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
@@ -30,8 +30,8 @@
                        type="text"
                        sortOrder="10"
                        showInDefault="1"
-                       showInWebsite="1"
-                       showInStore="1">
+                       showInWebsite="0"
+                       showInStore="0">
                     <label>API Key</label>
                     <comment>Enter the API key generated for IndexNow.</comment>
                 </field>
@@ -40,8 +40,8 @@
                        type="text"
                        sortOrder="20"
                        showInDefault="1"
-                       showInWebsite="1"
-                       showInStore="1">
+                       showInWebsite="0"
+                       showInStore="0">
                     <label>Key Location (optional)</label>
                     <frontend_class>validate-url</frontend_class>
                 </field>
@@ -50,53 +50,52 @@
                        type="select"
                        sortOrder="30"
                        showInDefault="1"
-                       showInWebsite="1"
-                       showInStore="1">
+                       showInWebsite="0"
+                       showInStore="0">
                     <label>Debug mode</label>
                     <comment>Includes extended logging requests and responses</comment>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
             </group>
-                <group id="bing"
-                       translate="label"
-                       sortOrder="100"
-                       showInDefault="1"
-                       showInWebsite="1"
-                       showInStore="1">
-                    <label>Bing</label>
+            <group id="bing"
+                   translate="label"
+                   sortOrder="100"
+                   showInDefault="1"
+                   showInWebsite="0"
+                   showInStore="0">
+                <label>Bing</label>
 
-                    <field id="endpoint_url"
-                           translate="label comment"
-                           type="text"
-                           sortOrder="40"
-                           showInDefault="1"
-                           showInWebsite="1"
-                           showInStore="1">
-                        <label>Endpoint URL</label>
-                        <comment>Enter the endpoint URL (default: https://api.indexnow.org/indexnow).</comment>
-                        <frontend_class>validate-url</frontend_class>
-                    </field>
-                </group>
-                <group id="yandex"
-                       translate="label"
-                       sortOrder="200"
+                <field id="endpoint_url"
+                       translate="label comment"
+                       type="text"
+                       sortOrder="40"
                        showInDefault="1"
-                       showInWebsite="1"
-                       showInStore="1">
-                    <label>Yandex</label>
-                    <field id="endpoint_url"
-                           translate="label comment"
-                           type="text"
-                           sortOrder="40"
-                           showInDefault="1"
-                           showInWebsite="1"
-                           showInStore="1">
-                        <label>Endpoint URL</label>
-                        <comment>Enter the endpoint URL (default: https://api.indexnow.org/indexnow).</comment>
-                        <frontend_class>validate-url</frontend_class>
-                    </field>
-
-                </group>
+                       showInWebsite="0"
+                       showInStore="0">
+                    <label>Endpoint URL</label>
+                    <comment>Enter the endpoint URL (default: https://api.indexnow.org/indexnow).</comment>
+                    <frontend_class>validate-url</frontend_class>
+                </field>
+            </group>
+            <group id="yandex"
+                   translate="label"
+                   sortOrder="200"
+                   showInDefault="1"
+                   showInWebsite="0"
+                   showInStore="0">
+                <label>Yandex</label>
+                <field id="endpoint_url"
+                       translate="label comment"
+                       type="text"
+                       sortOrder="40"
+                       showInDefault="1"
+                       showInWebsite="0"
+                       showInStore="0">
+                    <label>Endpoint URL</label>
+                    <comment>Enter the endpoint URL (default: https://api.indexnow.org/indexnow).</comment>
+                    <frontend_class>validate-url</frontend_class>
+                </field>
+            </group>
         </section>
     </system>
 </config>

@@ -12,6 +12,7 @@ namespace Mygento\IndexNow\Model\Service;
 
 use Magento\Framework\HTTP\Client\Curl;
 use Magento\Framework\HTTP\Client\CurlFactory;
+use Magento\Framework\Serialize\SerializerInterface;
 use Mygento\IndexNow\Helper\Data as ConfigHelper;
 use Psr\Log\LoggerInterface;
 
@@ -25,6 +26,7 @@ class IndexNowSender
     public function __construct(
         private CurlFactory $curlFactory,
         private ConfigHelper $configHelper,
+        private SerializerInterface $serializer,
         private LoggerInterface $logger,
     ) {}
 
@@ -37,20 +39,21 @@ class IndexNowSender
         }
         $apiKey = $this->configHelper->getApiKey();
         $keyLocation = $this->configHelper->getKeyLocation();
+        $data = [
+            'urlList' => [$url],
+            'key' => $apiKey,
+        ];
+        if ($keyLocation) {
+            $data['keyLocation'] = $keyLocation;
+        }
 
         foreach (self::SERVICE_CODES as $code) {
             if (!$this->configHelper->getEndpointUrl($code)) {
                 $this->log('[IndexNow] No endpoint available for ' . $code);
                 continue;
             }
-            $this->request(
-                [
-                    'host' => $this->configHelper->getEndpointUrl($code),
-                    'key' => $apiKey,
-                    'urlList' => [$url],
-                    'keyLocation' => $keyLocation,
-                ],
-            );
+            $data['host'] = $this->configHelper->getEndpointUrl($code);
+            $this->request($data);
         }
     }
 
@@ -70,7 +73,7 @@ class IndexNowSender
 
         try {
             $curl->addHeader('Content-Type', 'application/json');
-            $curl->post($payload['host'], json_encode($payload));
+            $curl->post($payload['host'], $this->serializer->serialize($payload));
 
             $statusCode = $curl->getStatus();
             $responseBody = $curl->getBody();

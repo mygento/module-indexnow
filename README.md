@@ -22,4 +22,4 @@
 ## Консольные команды
 
 ## Конфигурация
-Stores > Configuration Mygento -> IndexNow
+Stores -> Configuration -> Mygento -> IndexNow
