@@ -8,9 +8,9 @@
 
 namespace Mygento\IndexNow\Model;
 
-use Magento\Framework\App\Helper\AbstractHelper;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 
-class Config extends AbstractHelper
+class Config
 {
     private const string XML_PATH_API_KEY = 'mygento_indexnow/%s/api_key';
     private const string XML_PATH_KEY_LOCATION = 'mygento_indexnow/%s/key_location';
@@ -19,6 +19,10 @@ class Config extends AbstractHelper
     private const string XML_PATH_DEBUG_ENABLED = 'mygento_indexnow/general/debug_enabled';
     private const string XML_PATH_ENABLED_FOR_ATTRIBUTES = 'mygento_indexnow/general/enabled_for_attributes';
     private const string XML_PATH_PRODUCT_ATTRIBUTES = 'mygento_indexnow/general/product_attributes';
+
+    public function __construct(
+        private ScopeConfigInterface $scopeConfig,
+    ) {}
 
     public function isEnabled(): bool
     {
