@@ -4,7 +4,7 @@
     <default>
         <mygento_indexnow>
             <bing>
-                <endpoint_url>https://api.indexnow.org/indexnow</endpoint_url>
+                <endpoint_url>https://www.bing.com/indexnow</endpoint_url>
             </bing>
             <yandex>
                 <endpoint_url>https://yandex.com/indexnow</endpoint_url>

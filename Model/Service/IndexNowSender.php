@@ -13,7 +13,7 @@ namespace Mygento\IndexNow\Model\Service;
 use Magento\Framework\HTTP\Client\Curl;
 use Magento\Framework\HTTP\Client\CurlFactory;
 use Magento\Framework\Serialize\SerializerInterface;
-use Mygento\IndexNow\Helper\Data as ConfigHelper;
+use Mygento\IndexNow\Model\Config as ConfigHelper;
 use Psr\Log\LoggerInterface;
 
 class IndexNowSender
@@ -30,63 +30,58 @@ class IndexNowSender
         private LoggerInterface $logger,
     ) {}
 
-    public function submitUrl(string $url): void
+    public function submitUrl(array $urlList): void
     {
-        if (!$this->configHelper->isEnabled()) {
-            $this->log('[IndexNow] IndexNow service disabled');
-
-            return;
-        }
-        $apiKey = $this->configHelper->getApiKey();
-        $keyLocation = $this->configHelper->getKeyLocation();
-        $data = [
-            'urlList' => [$url],
-            'key' => $apiKey,
-        ];
-        if ($keyLocation) {
-            $data['keyLocation'] = $keyLocation;
-        }
-
+        $urlList = array_unique($urlList);
         foreach (self::SERVICE_CODES as $code) {
             if (!$this->configHelper->getEndpointUrl($code)) {
                 $this->log('[IndexNow] No endpoint available for ' . $code);
                 continue;
             }
-            $data['host'] = $this->configHelper->getEndpointUrl($code);
-            $this->request($data);
+
+            $this->request(
+                [
+                    'host' => $this->configHelper->getEndpointUrl($code),
+                    'key' => $this->configHelper->getApiKey($code),
+                    'urlList' => $urlList,
+                    'keyLocation' => $this->configHelper->getKeyLocation($code),
+                ],
+            );
         }
     }
 
-    private function log(string $message, ?string $level = 'info'): void
+    private function log(string $message, ?string $level = 'info', ?\Throwable $e = null): void
     {
         $debugMode = $this->configHelper->isDebugEnabled();
         if ($debugMode || $level === 'error') {
-            $this->logger->log($level, $message);
+            $this->logger->log($level, $message, ['exception' => $e]);
         }
     }
 
     private function request(array $payload): void
     {
-        $url = implode(', ', $payload['urlList']);
+        $host = $payload['host'];
         /** @var Curl $curl */
         $curl = $this->curlFactory->create();
 
         try {
+            $payload = $this->serializer->serialize($payload);
+            $this->log("[IndexNow] Sending to: {$host}, payload {$payload} ");
             $curl->addHeader('Content-Type', 'application/json');
-            $curl->post($payload['host'], $this->serializer->serialize($payload));
+            $curl->post($host, $payload);
 
             $statusCode = $curl->getStatus();
             $responseBody = $curl->getBody();
 
             if ($statusCode >= 200 && $statusCode < 300) {
-                $this->log("[IndexNow] URL submitted successfully: {$url}");
+                $this->log("[IndexNow] URL submitted successfully: {$payload}");
 
                 return;
             }
 
-            $this->log("[IndexNow] Failed to submit URL: {$url}. Status: {$statusCode}. Response: {$responseBody}", 'error');
+            $this->log("[IndexNow] Failed to submit payload: {$payload}. Status: {$statusCode}. Response: {$responseBody}", 'error');
         } catch (\Throwable $e) {
-            $this->log("[IndexNow] Exception during URL submission: {$e->getMessage()}", 'error');
+            $this->log("[IndexNow] Exception during URL submission to {$host} : {$e->getMessage()}", 'error', $e);
         }
     }
 }

@@ -45,10 +45,11 @@ class CmsPageSaveAfter implements ObserverInterface
             $storeIds = array_map(fn($s) => (int) $s->getId(), $stores);
         }
 
-        foreach ($storeIds as $storeId) {
-            try {
-                $baseUrl = rtrim($this->storeManager->getStore($storeId)->getBaseUrl(), '/');
+        $urlList = [];
 
+        try {
+            foreach ($storeIds as $storeId) {
+                $baseUrl = rtrim($this->storeManager->getStore($storeId)->getBaseUrl(), '/');
                 $suffix = (string) $this->scopeConfig->getValue(
                     'cms/page/url_suffix',
                     \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
@@ -56,20 +57,18 @@ class CmsPageSaveAfter implements ObserverInterface
                 );
 
                 if ($identifier === 'home') {
-                    $url = $baseUrl . '/';
+                    $urlList[] = $baseUrl . '/';
                 } else {
-                    $url = $baseUrl . '/' . ltrim($identifier, '/') . $suffix;
+                    $urlList[] = $baseUrl . '/' . ltrim($identifier, '/') . $suffix;
                 }
-
-                $this->indexNowSender->submitUrl($url);
-            } catch (\Throwable $e) {
-                $this->logger->error(sprintf(
-                    '[IndexNow] Error sending CMS page %s to store %d: %s',
-                    (string) $page->getId(),
-                    (int) $storeId,
-                    $e->getMessage(),
-                ));
             }
+            $this->indexNowSender->submitUrl($urlList);
+        } catch (\Throwable $e) {
+            $this->logger->error(sprintf(
+                '[IndexNow] Error sending CMS page %s: %s',
+                (string) $page->getId(),
+                $e->getMessage(),
+            ));
         }
     }
 }

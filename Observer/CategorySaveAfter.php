@@ -41,8 +41,10 @@ class CategorySaveAfter implements ObserverInterface
             $storeIds = array_map(fn($s) => (int) $s->getId(), $stores);
         }
 
-        foreach ($storeIds as $storeId) {
-            try {
+        $urlList = [];
+
+        try {
+            foreach ($storeIds as $storeId) {
                 $rewrite = $this->urlFinder->findOneByData([
                     UrlRewrite::ENTITY_ID => $category->getId(),
                     UrlRewrite::ENTITY_TYPE => 'category',
@@ -52,18 +54,16 @@ class CategorySaveAfter implements ObserverInterface
                 if ($rewrite && $rewrite->getRequestPath()) {
                     $baseUrl = rtrim($this->storeManager->getStore($storeId)->getBaseUrl(), '/');
                     $requestPath = ltrim((string) $rewrite->getRequestPath(), '/');
-                    $url = $baseUrl . '/' . $requestPath;
-
-                    $this->indexNowSender->submitUrl($url);
+                    $urlList[] = $baseUrl . '/' . $requestPath;
                 }
-            } catch (\Throwable $e) {
-                $this->logger->error(sprintf(
-                    '[IndexNow] Error generating/sending the URL for category %s on store %d : %s',
-                    (string) $category->getId(),
-                    (int) $storeId,
-                    $e->getMessage(),
-                ));
             }
+            $this->indexNowSender->submitUrl($urlList);
+        } catch (\Throwable $e) {
+            $this->logger->error(sprintf(
+                '[IndexNow] Error generating/sending the URL for category %s : %s',
+                (string) $category->getId(),
+                $e->getMessage(),
+            ));
         }
     }
 }
