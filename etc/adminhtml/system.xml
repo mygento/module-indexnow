@@ -29,25 +29,25 @@
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
                 <field id="debug_enabled"
-                translate="label comment"
-                type="select"
-                sortOrder="30"
-                showInDefault="1"
-                showInWebsite="0"
-                showInStore="0">
-                    <label>Debug mode</label>
-                    <comment>Includes extended logging requests and responses</comment>
-                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                </field>
-                <field id="enabled_for_product_attributes"
                        translate="label comment"
                        type="select"
                        sortOrder="30"
                        showInDefault="1"
                        showInWebsite="0"
                        showInStore="0">
-                    <label>Enabled only by product attribute change</label>
-                    <comment>Specify attributes list that will trigger sending indexNow request</comment>
+                    <label>Debug mode</label>
+                    <comment>Includes extended logging requests and responses</comment>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="enabled_for_attributes"
+                       translate="label comment"
+                       type="select"
+                       sortOrder="30"
+                       showInDefault="1"
+                       showInWebsite="0"
+                       showInStore="0">
+                    <label>Enabled for product attribute change</label>
+                    <comment>Specify product attributes list that will trigger sending indexNow request in the selector below</comment>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
                 <field id="product_attributes"
@@ -58,8 +58,12 @@
                        showInWebsite="0"
                        showInStore="0">
                     <label>Products Attributes</label>
+                    <validate>required-entry</validate>
+                    <depends>
+                        <field id="enabled_for_attributes">1</field>
+                    </depends>
                     <source_model>Mygento\IndexNow\Model\Source\Attributes</source_model>
-                    <comment>Select attributes that will trigger indexNow request</comment>
+                    <comment>Specify attributes list that will trigger sending indexNow request</comment>
                 </field>
             </group>
             <group id="bing"
