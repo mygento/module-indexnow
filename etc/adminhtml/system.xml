@@ -36,14 +36,14 @@
                     <comment>Includes extended logging requests and responses</comment>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
-                <field id="enabled_for_attributes"
+                <field id="enabled_for_product_attributes"
                        translate="label comment"
                        type="select"
                        sortOrder="30"
                        showInDefault="1"
                        showInWebsite="0"
                        showInStore="0">
-                    <label>Enabled only by attribute change</label>
+                    <label>Enabled only by product attribute change</label>
                     <comment>Specify attributes list that will trigger sending indexNow request</comment>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>

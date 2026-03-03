@@ -17,7 +17,7 @@ class Config
     private const string XML_PATH_ENDPOINT_URL = 'mygento_indexnow/%s/endpoint_url';
     private const string XML_PATH_ENABLED = 'mygento_indexnow/general/enabled';
     private const string XML_PATH_DEBUG_ENABLED = 'mygento_indexnow/general/debug_enabled';
-    private const string XML_PATH_ENABLED_FOR_ATTRIBUTES = 'mygento_indexnow/general/enabled_for_attributes';
+    private const string XML_PATH_ENABLED_FOR_ATTRIBUTES = 'mygento_indexnow/general/enabled_for_product_attributes';
     private const string XML_PATH_PRODUCT_ATTRIBUTES = 'mygento_indexnow/general/product_attributes';
 
     public function __construct(

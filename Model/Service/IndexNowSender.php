@@ -13,7 +13,7 @@ namespace Mygento\IndexNow\Model\Service;
 use Magento\Framework\HTTP\Client\Curl;
 use Magento\Framework\HTTP\Client\CurlFactory;
 use Magento\Framework\Serialize\SerializerInterface;
-use Mygento\IndexNow\Model\Config as ConfigHelper;
+use Mygento\IndexNow\Model\Config;
 use Psr\Log\LoggerInterface;
 
 class IndexNowSender
@@ -25,7 +25,7 @@ class IndexNowSender
 
     public function __construct(
         private CurlFactory $curlFactory,
-        private ConfigHelper $configHelper,
+        private Config $configHelper,
         private SerializerInterface $serializer,
         private LoggerInterface $logger,
     ) {}
