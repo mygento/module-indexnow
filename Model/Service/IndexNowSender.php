@@ -65,8 +65,9 @@ class IndexNowSender
         $curl = $this->curlFactory->create();
 
         try {
+            $urlList = implode(',', $payload['urlList']);
             $payload = $this->serializer->serialize($payload);
-            $this->log("[IndexNow] Sending to: {$host}, payload {$payload} ");
+            $this->log("[IndexNow] Sending to: {$host}, urlList {$urlList} ");
             $curl->addHeader('Content-Type', 'application/json');
             $curl->post($host, $payload);
 
@@ -74,12 +75,12 @@ class IndexNowSender
             $responseBody = $curl->getBody();
 
             if ($statusCode >= 200 && $statusCode < 300) {
-                $this->log("[IndexNow] URL submitted successfully: {$payload}");
+                $this->log("[IndexNow] URL submitted successfully: {$urlList}");
 
                 return;
             }
 
-            $this->log("[IndexNow] Failed to submit payload: {$payload}. Status: {$statusCode}. Response: {$responseBody}", 'error');
+            $this->log("[IndexNow] Failed to submit urlList: {$urlList}. Status: {$statusCode}. Response: {$responseBody}", 'error');
         } catch (\Throwable $e) {
             $this->log("[IndexNow] Exception during URL submission to {$host} : {$e->getMessage()}", 'error', $e);
         }
