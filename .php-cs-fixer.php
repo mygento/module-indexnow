@@ -1,7 +1,7 @@
 <?php
 $header = <<<EOF
 @author Mygento Team
-@copyright 2026 Mygento (https://www.mygento.ru)
+@copyright 2026 Mygento (https://www.mygento.com)
 @package Mygento_IndexNow
 EOF;
 
