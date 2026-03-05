@@ -14,6 +14,7 @@ use Magento\Cms\Model\Page;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
+use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use Mygento\IndexNow\Model\Service\IndexNowSender;
 use Psr\Log\LoggerInterface;
@@ -40,7 +41,7 @@ class CmsPageSaveAfter implements ObserverInterface
         }
 
         $storeIds = $page->getStoreId();
-        if ($storeIds === null || in_array(0, (array) $storeIds, true)) {
+        if ($storeIds === null || in_array(Store::DEFAULT_STORE_ID, (array) $storeIds)) {
             $stores = $this->storeManager->getStores();
             $storeIds = array_map(fn($s) => (int) $s->getId(), $stores);
         }
