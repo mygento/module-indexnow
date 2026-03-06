@@ -1,25 +1,17 @@
 # Mygento_IndexNow module
 
-## Функционал
-Модуль интегрирует протокол IndexNow в Magento, что позволяет ускорить индексацию вашего сайта поисковыми системами, поддерживающими IndexNow.
-Этот модуль будет автоматически уведомлять поисковые системы о новом или обновленном контенте (страницах CMS, категориях и товарах) на вашем сайте.
+## Features
+This module integrates the IndexNow protocol into Magento, allowing for faster indexing of your website by search engines that support IndexNow.
+This module will automatically notify search engines about new or updated content (CMS pages, categories and products) on your website.
 
-## Зависимости
+## Dependencies
 - Magento_Config
 - Magento_Backend
 
-## Backend
+## Events
+- `Mygento\IndexNow\Observer\ProductSaveAfter` - listens to product save events and sends data to IndexNow services.
+- `Mygento\IndexNow\Observer\CategorySaveAfter` - listens to category save events and sends data to IndexNow services.
+- `Mygento\IndexNow\Observer\CmsPageSaveAfter` - listens to CMS page save events and sends data to IndexNow services.
 
-## Плагины
-
-## События
-- `Mygento\IndexNow\Observer\ProductSaveAfter` - отслеживает событие сохранения товара и отправляет данные в сервисы IndexNow.
-- `Mygento\IndexNow\Observer\CategorySaveAfter` - отслеживает событие сохранения категории и отправляет данные в сервисы IndexNow.
-- `Mygento\IndexNow\Observer\CmsPageSaveAfter` - отслеживает событие сохранения CMS-страницы и отправляет данные в сервисы IndexNow.
-
-## Cron-процессы
-
-## Консольные команды
-
-## Конфигурация
+## Configuration
 Stores -> Configuration -> Mygento -> IndexNow
