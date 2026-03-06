@@ -16,8 +16,7 @@
         "indexnow"
     ],
     "require": {
-        "php": ">=8.0.0",
-        "mygento/module-base": "~2.4.3"
+        "php": ">=8.0.0"
     },
     "require-dev": {
         "mygento/coding-standard": "~2.14.0"
