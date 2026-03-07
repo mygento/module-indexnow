@@ -16,7 +16,8 @@
         "indexnow"
     ],
     "require": {
-        "php": ">=8.0.0"
+        "php": ">=8.3.0",
+        "magento/module-catalog": "104.*"
     },
     "require-dev": {
         "mygento/coding-standard": "~2.14.0"
