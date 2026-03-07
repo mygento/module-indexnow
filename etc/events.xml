@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
+    <event name="catalog_product_save_after">
+        <observer name="mygento_indexnow_product_save"
+                  instance="Mygento\IndexNow\Observer\ProductSaveAfter"/>
+    </event>
+
+    <event name="catalog_category_save_after">
+        <observer name="mygento_indexnow_category_save"
+                  instance="Mygento\IndexNow\Observer\CategorySaveAfter"/>
+    </event>
+
+    <event name="cms_page_save_after">
+        <observer name="mygento_indexnow_page_save"
+                  instance="Mygento\IndexNow\Observer\CmsPageSaveAfter"/>
+    </event>
+</config>
