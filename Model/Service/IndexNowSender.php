@@ -13,6 +13,8 @@ namespace Mygento\IndexNow\Model\Service;
 use Magento\Framework\HTTP\Client\Curl;
 use Magento\Framework\HTTP\Client\CurlFactory;
 use Magento\Framework\Serialize\SerializerInterface;
+use Magento\Framework\UrlInterface;
+use Magento\Store\Model\StoreManagerInterface;
 use Mygento\IndexNow\Model\Config;
 use Psr\Log\LoggerInterface;
 
@@ -24,6 +26,7 @@ class IndexNowSender
     ];
 
     public function __construct(
+        private StoreManagerInterface $storeManager,
         private CurlFactory $curlFactory,
         private Config $configHelper,
         private SerializerInterface $serializer,
@@ -40,14 +43,24 @@ class IndexNowSender
             }
 
             $this->request(
+                $code,
                 [
-                    'host' => $this->configHelper->getEndpointUrl($code),
+                    'host' => $this->getHost(),
                     'key' => $this->configHelper->getApiKey($code),
                     'urlList' => $urlList,
                     'keyLocation' => $this->configHelper->getKeyLocation($code),
                 ],
             );
         }
+    }
+
+    private function getHost(): string
+    {
+        $baseUrl = $this->storeManager
+            ->getStore()
+            ->getBaseUrl(UrlInterface::URL_TYPE_WEB);
+
+        return (string) parse_url($baseUrl, PHP_URL_HOST);
     }
 
     private function log(string $message, ?string $level = 'info', ?\Throwable $e = null): void
@@ -58,18 +71,17 @@ class IndexNowSender
         }
     }
 
-    private function request(array $payload): void
+    private function request(string $code, array $payload): void
     {
-        $host = $payload['host'];
         /** @var Curl $curl */
         $curl = $this->curlFactory->create();
 
         try {
             $urlList = implode(',', $payload['urlList']);
             $payload = $this->serializer->serialize($payload);
-            $this->log("[IndexNow] Sending to: {$host}, urlList {$urlList} ");
+            $this->log("[IndexNow] Sending to: {$code}, urlList {$urlList} ");
             $curl->addHeader('Content-Type', 'application/json');
-            $curl->post($host, $payload);
+            $curl->post($this->configHelper->getEndpointUrl($code), $payload);
 
             $statusCode = $curl->getStatus();
             $responseBody = $curl->getBody();
@@ -82,7 +94,7 @@ class IndexNowSender
 
             $this->log("[IndexNow] Failed to submit urlList: {$urlList}. Status: {$statusCode}. Response: {$responseBody}", 'error');
         } catch (\Throwable $e) {
-            $this->log("[IndexNow] Exception during URL submission to {$host} : {$e->getMessage()}", 'error', $e);
+            $this->log("[IndexNow] Exception during URL submission to {$code} : {$e->getMessage()}", 'error', $e);
         }
     }
 }
